@@ -1,22 +1,21 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { ListItem, Avatar } from "react-native-elements";
 
-const CustomListItem = ({ id, chatName, enterChat }) => {
+const CustomListItem = ({ id, chatName, subtitle }) => {
   return (
-    <ListItem>
+    <ListItem bottomDivider>
       <Avatar
         rounded
         source={{
-          uri: "https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg",
+          uri: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
         }}
       />
       <ListItem.Content>
         <ListItem.Title style={{ fontWeight: "800" }}>
-          Rahman Shaukat
+          {chatName ? chatName : "No name available"}
         </ListItem.Title>
         <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail">
-          This is test subtitle
+          {subtitle ? subtitle : "No messages yet"}
         </ListItem.Subtitle>
       </ListItem.Content>
     </ListItem>
@@ -24,5 +23,3 @@ const CustomListItem = ({ id, chatName, enterChat }) => {
 };
 
 export default CustomListItem;
-
-const styles = StyleSheet.create({});

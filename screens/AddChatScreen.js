@@ -18,16 +18,15 @@ const AddChatScreen = ({ navigation }) => {
       headerBackTitle: "Chats",
     });
   }, [navigation]);
-  const randomId = () => {
-    Math.random().toString(36).slice(2);
-  };
+  const randomId = () => Math.random().toString(36).slice(2);
   const createChat = async () => {
     try {
-      await setDoc(doc(db, "chats", randomId), {
-        chatName: Input,
+      await setDoc(doc(db, "chats", randomId()), {
+        chatName: state.input,
       });
     } catch (err) {
-      console.error(err), alert(err);
+      console.error(err);
+      alert(err);
     }
   };
   return (
@@ -49,5 +48,9 @@ const AddChatScreen = ({ navigation }) => {
 export default AddChatScreen;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: "white",
+    padding: 30,
+    height: "100%",
+  },
 });

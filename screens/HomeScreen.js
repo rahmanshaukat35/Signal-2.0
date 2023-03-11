@@ -7,13 +7,16 @@ import {
   View,
 } from "react-native";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import CustomListItem from "../components/CustomListItem";
 import { Avatar } from "react-native-elements";
-import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
+import { collection, getDocs } from "firebase/firestore";
+import { db, auth } from "../firebase";
 
 const HomeScreen = ({ navigation }) => {
+  const [chats, setChats] = useState([]);
+
   const signOutUser = () => {
     signOut(auth)
       .then(() => {
@@ -23,6 +26,22 @@ const HomeScreen = ({ navigation }) => {
         // An error happened.
       });
   };
+
+  const readMessages = async () => {
+    console.log("reading messages");
+    const querySnapshot = await getDocs(collection(db, "chats"));
+    let array = [];
+    querySnapshot.forEach((doc) => {
+      console.log("doc id:", doc.id);
+      console.log("doc data:", doc.data());
+      array.push({ id: doc.id, data: doc.data() });
+    });
+    console.log("set chats:", array);
+    setChats(array);
+  };
+  useEffect(() => {
+    readMessages();
+  }, []);
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Signal",
@@ -62,11 +81,15 @@ const HomeScreen = ({ navigation }) => {
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, signOutUser]);
+
   return (
     <SafeAreaView>
       <ScrollView>
-        <CustomListItem />
+        {chats.map(
+          ({ id, data }) =>
+            data && <CustomListItem key={id} id={id} chatName={data.chatName} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
